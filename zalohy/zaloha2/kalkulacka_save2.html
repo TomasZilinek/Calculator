@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>kalkulacka</title>    
+        <link rel="stylesheet" href="kalkulacka_save2.css">
+    </head>
+    <body>
+        <div class=input_div>
+             <p class=p_input id="main_input"></p>
+        </div>
+        <div class=buttons_div>
+            <table class=num_table>
+                <tr>
+                    <td><button class=td_button value=7 onclick='addToInput(value)'>7</button></td>
+                    <td><button class=td_button value=8 onclick='addToInput(value)'>8</button></td>
+                    <td><button class=td_button value=9 onclick='addToInput(value)'>9</button></td>
+                </tr>
+                <tr>
+                    <td><button class=td_button value=4 onclick='addToInput(value)'>4</button></td>
+                    <td><button class=td_button value=5 onclick='addToInput(value)'>5</button></td>
+                    <td><button class=td_button value=6 onclick='addToInput(value)'>6</button></td>
+                </tr>
+                <tr>
+                    <td><button class=td_button value=1 onclick='addToInput(value)'>1</button></td>
+                    <td><button class=td_button value=2 onclick='addToInput(value)'>2</button></td>
+                    <td><button class=td_button value=3 onclick='addToInput(value)'>3</button></td>
+                </tr>
+                <tr>
+                    <td><button class=td_button value=. onclick='addToInput(value)' style="font-size: 40px">.</button></td>
+                    <td><button class=td_button value=0 onclick='addToInput(value)'>0</button></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+        <div class=oper1_div>
+            <table class=oper1_table>
+                <tr>
+                    <td><button class=td_button onclick='backspace(document.getElementById("main_input").innerHTML)'><--</button></td>
+                </tr>
+                <tr>
+                    <td><button class=td_button></button></td>
+                </tr>
+                <tr>
+                    <td><button class=td_button onclick='clearAll()' style="font-size: 20px">CLEAR</button></td>
+                </tr>
+                <tr>
+                    <td><button class=td_button onclick=calculate(document.getElementById("main_input").innerHTML)>=</button></td>
+                </tr>
+            </table>
+        </div>
+        <div class=oper2_div>
+            <table class=oper2_table>
+                <tr>
+                    <td><button class=td_button value=+ onclick='addToInput(value)'>+</button></td>
+                </tr>
+                <tr>
+                    <td><button class=td_button value=- onclick='addToInput(value)'>-</button></td>
+                </tr>
+                <tr>
+                    <td><button class=td_button value=* onclick='addToInput(value)'>x</button></td>
+                </tr>
+                <tr>
+                    <td><button class=td_button value=/ onclick='addToInput(value)'>/</button></td>
+                </tr>
+            </table>
+            <p id="output" class=output></p>
+        </div>
+    </body>
+
+<script>
+
+    function factorial(f)
+    {
+        var sum = 1;
+        for(i = 1, n = f; i <= n; i++)
+        {
+            sum *= i;
+        }
+        return sum;
+    }
+
+    function addToInput(x)
+    {
+         document.getElementById("main_input").innerHTML += x;
+     }
+
+     function backspace(inpstr)
+     {
+          var sr = inpstr;
+          var x = inpstr.length;
+          var y = sr.slice(0, x-1);
+          document.getElementById("main_input").innerHTML = y;
+     }
+
+     function calculate(inpstr)
+     {
+          var astrnum = 0;
+          var slashnum = 0;
+          var plusnum = 0;
+          var minusnum = 0;
+          var txt = inpstr.split("");
+          var buffer1 = "";
+          var l = txt.length;
+          var oper;
+          for(i = 0; i < l; i++)
+          {
+               buffer1 = txt[i];
+               if (buffer1 == "*")
+               {
+                    astrnum += 1;
+               }
+          }
+          
+          var fin_sum = 0;
+/*
+          for(a = 0, b = astrnum; a <= b; a++)
+          {
+               fin_sum =
+          }
+*/
+          //var buf = get2(txt, oper);
+          var buf = get2(txt, "*");
+          document.getElementById("output").innerHTML = buf;
+     }
+
+     function get2(txt1, oper)
+     {
+          var buffer2 = "";
+          var b;
+          var numb = [];
+          var firstnum = "";
+          var secondnum = "";
+          var operpos = txt1.indexOf(oper);
+          b = operpos - 1;
+          while(buffer2 != "+" && buffer2 != "-" && buffer2 != "/" && b > -1 && buffer2 != "*")
+          {
+               numb.splice(0, 0, txt1[b]);
+               b--;
+               buffer2 = txt1[b];
+          }
+          for(i = 0, le = numb.length; i < le; i++)
+          {
+                firstnum += numb[i];
+          }
+          var numb1 = [];
+          b = operpos + 1;
+          buffer2 = "";
+          while(buffer2 != "+" && buffer2 != "-" && buffer2 != "/" && buffer2 != "*" && b < txt1.length)
+          {
+               numb1.splice(numb1.length, 0, txt1[b]);
+               b++;
+               buffer2 = txt1[b];
+          }
+          for(i = 0, len = numb1.length; i < len; i++)
+          {
+                secondnum +=numb1[i];
+          } 
+          var fi = operpos - numb.length;
+          var se = operpos + numb1.length + 1;
+          var newtxt = txt1.slice(fi, se);
+          var newtxt1 = "";
+          for(i = 0, c = newtxt.length; i < c; i++)
+          {
+               newtxt1 += newtxt[i];
+          }
+          var toreplace;
+          if(oper == "*")
+          {
+               toreplace = Number(firstnum) * Number(secondnum);
+          }
+          else if(oper == "/")
+          {
+               toreplace = Number(firstnum) / Number(secondnum);
+          }
+          else if(oper == "+")
+          {
+               toreplace = Number(firstnum) + Number(secondnum);
+          }
+          else if(oper == "-")
+          {
+               toreplace = Number(firstnum) - Number(secondnum);
+          }
+
+          toreplace = toreplace.toString();
+          txt1 = txt1.toString();
+          for(s = 0, d = txt1.length; s <= d; s++)
+          {
+               txt1 = txt1.replace(",","")
+          }
+          var newtxt2 = txt1.replace(newtxt1, toreplace);
+          //return newtxt1 + " " + toreplace;
+          return newtxt2;
+     }
+
+
+     function clearAll()
+     {
+          document.getElementById("main_input").innerHTML = "";
+          document.getElementById("output").innerHTML = "";
+     }
+
+</script>
+
+</html>

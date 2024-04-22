@@ -1,0 +1,81 @@
+.td_button{
+    width: 67px;
+    height: 50px;
+    font-size: 33px;
+    background-color: rgb(50,50,50);
+    color: rgb(240,240,240);
+    border: 0px;
+    padding: 0px;
+}
+
+.num_table{
+    position: absolute;
+    left: 0px;
+    top: 20px;
+    width: 170px;
+    padding: 0px;
+    background-color: rgb(50,50,50);
+    border: 1px solid black;
+    height: 200px;
+}
+
+.oper1_table{
+    position: absolute;
+    top: 20px;
+    left: 184px;
+    background-color: rgb(50,50,50);
+    border: 1px rgb(50,50,50);
+    padding: 0px;
+    height: 200px;
+}
+
+.oper2_table{
+    position: absolute;
+    top: 20px;
+    left: 257px;
+    background-color: rgb(50,50,50);
+    border: 1px rgb(50,50,50);
+    padding: 0px;
+    height: 200px;
+}
+
+.input_div{
+    position: absolute;
+    top: 10px;
+    width: 95%;
+    height: 60px;
+    background-color: rgb(240, 240, 240);
+    border: 1px solid black;
+    padding: 0px;
+}
+
+.p_input{
+    font-size: 25px;
+    position: absolute;
+    border 1px solid black;
+}
+
+.buttons_div{
+    position: absolute;
+    width: 400px;
+    top: 52px;
+}
+
+.oper1_div{
+    position: absolute;
+    left: 40px;
+    top: 52px;
+}
+
+.oper2_div{
+    position: absolute;
+    left: 40px;
+    top: 52px;
+}
+
+.output{
+    position: absolute;
+    left: 337px;
+    top: 14px;
+    font-size: 20px;
+}

@@ -1,0 +1,688 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title>kalkulacka</title>
+        <link rel="stylesheet" href="kalkulacka_save7.css">
+    </head>
+    <body>
+        <div class="input_div">
+             <p class="p_input" id="main_input"></p>
+        </div>
+        <div class="buttons_div">
+            <table class="num_table">
+                <tr>
+                    <td><button class="td_button" value=7 onclick='addToInput(value)'>7</button></td>
+                    <td><button class="td_button" value=8 onclick='addToInput(value)'>8</button></td>
+                    <td><button class="td_button" value=9 onclick='addToInput(value)'>9</button></td>
+                </tr>
+                <tr>
+                    <td><button class="td_button" value=4 onclick='addToInput(value)'>4</button></td>
+                    <td><button class="td_button" value=5 onclick='addToInput(value)'>5</button></td>
+                    <td><button class="td_button" value=6 onclick='addToInput(value)'>6</button></td>
+                </tr>
+                <tr>
+                    <td><button class="td_button" value=1 onclick='addToInput(value)'>1</button></td>
+                    <td><button class="td_button" value=2 onclick='addToInput(value)'>2</button></td>
+                    <td><button class="td_button" value=3 onclick='addToInput(value)'>3</button></td>
+                </tr>
+                <tr>
+                    <td><button class="td_button" value=. onclick='addToInput(value)' style="font-size: 40px">.</button></td>
+                    <td><button class="td_button" value=0 onclick='addToInput(value)'>0</button></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+        <div class="oper1_div">
+            <table class="oper1_table">
+                <tr>
+                    <td><button class="td_button" onclick='backspace(document.getElementById("main_input").innerHTML)'><--</button></td>
+                </tr>
+                <tr>
+                    <td><button class="td_button"></button></td>
+                </tr>
+                <tr>
+                    <td><button class="td_button" onclick='clearAll()' style="font-size: 20px">CLEAR</button></td>
+                </tr>
+                <tr>
+                    <td><button class="td_button" onclick=calculate(document.getElementById("main_input").innerHTML)>=</button></td>
+                </tr>
+            </table>
+        </div>
+        <div class="oper2_div">
+            <table class="oper2_table">
+                <tr>
+                    <td><button class="td_button" value=+ onclick='addToInput(value)'>+</button></td>
+                </tr>
+                <tr>
+                    <td><button class="td_button" value=- onclick='addToInput(value)'>-</button></td>
+                </tr>
+                <tr>
+                    <td><button class="td_button" value=* onclick='addToInput(value)'>x</button></td>
+                </tr>
+                <tr>
+                    <td><button class="td_button" value=/ onclick='addToInput(value)'>/</button></td>
+                </tr>
+            </table>
+        </div>
+        <div class="oper3_div">
+            <table class="oper3_table">
+                <tr>
+                    <td><button class="td_button" value=e onclick='addToInput(value)'>e</button></td>
+                </tr>
+                <tr>
+                    <td><button class="td_button" value=π onclick='addToInput(value)'>π</button></td>
+                </tr>
+                <tr>
+                    <td><button class="td_button" value="" onclick='addToInput(value)'></button></td>
+                </tr>
+                <tr>
+                    <td><button class="td_button" value="" onclick='addToInput(value)'></button></td>
+                </tr>
+            </table>
+            <p id="output" class="output"></p>
+        </div>
+        <p id="skuska" class="skuska"></p>
+    </body>
+
+<script>
+
+    var dotin;
+
+    function factorial(f)
+    {
+        var sum = 1;
+        for(i = 1; i <= f; i++)
+        {
+            sum *= i;
+        }
+        return sum;
+    }
+
+    function addToInput(x)
+    {
+         if(x == "+" || x == "-" || x == "*" || x == "/" || x == ".")
+         {
+             if(x == "." && checkForDot(document.getElementById("main_input").innerHTML) == 0)
+             {
+                 checkstr(x);
+             }
+             else if(x == "." && checkForDot(document.getElementById("main_input").innerHTML) == 1)
+             {}
+             else
+             {
+                 checkstr(x);
+             }
+         }
+         else if(x != "+" && x != "-" && x != "*" && x != "/" && x != ".")
+         {
+              document.getElementById("main_input").innerHTML += x;
+         }
+     }
+
+     function checkForDot(x)
+     {
+         for(i = x.length; i >= 0; i--)
+         {
+             if(x[i] == "+" || x[i] == "-" || x[i] == "*" || x[i] == "/" || i == 0)
+             {
+                 dotin = 0;
+                 break;
+             }
+             else if(x[i] == ".")
+             {
+                 dotin = 1;
+                 break;
+             }
+         }
+         return dotin;
+     }
+
+     function backspace(inpstr)
+     {
+          var y = inpstr.slice(0, inpstr.length-1);
+          document.getElementById("main_input").innerHTML = y;
+     }
+
+     function calculate(inpstr)
+     {
+          var txt = inpstr.split("");
+          var buffer1 = "";
+          var l = txt.length;
+          var abuff, sbuff;
+          var inpbuff = inpstr.split("");
+          var finder;
+          var totalsum = 0;
+          var ended = 0;
+          var buffl = inpbuff.length;
+          var pi_ind_m1 = inpbuff.indexOf("π") - 1;
+          var e_ind_m1 = inpbuff.indexOf("e") - 1;
+          abuff = 0;
+          sbuff = 0;
+          mbuff = 0;
+          pbuff = 0;
+          ended = 0;
+
+          inpbuff = inpbuff.join("");
+          while(inpbuff.indexOf("π") != -1)
+          {
+             pi_ind_m1 = inpbuff.indexOf("π") - 1;
+             if(inpbuff[pi_ind_m1] != "+" && inpbuff[pi_ind_m1] != "-" && inpbuff[pi_ind_m1] != "*" && inpbuff[pi_ind_m1] != "/" && pi_ind_m1 > -1)
+             {
+                inpbuff = inpbuff.split("");
+                inpbuff.splice(inpbuff.indexOf("π"), 0, "*");
+                inpbuff = inpbuff.join("");
+             }
+             pi_ind_m1 = inpbuff.indexOf("π") - 1;
+             if(inpbuff[pi_ind_m1 + 2] != "+" && inpbuff[pi_ind_m1 + 2] != "-" && inpbuff[pi_ind_m1 + 2] != "*" && inpbuff[pi_ind_m1 + 2] != "/" && pi_ind_m1 + 2 < inpbuff.length)
+             {
+               if(typeof(inpbuff) == "string")
+               {
+                  inpbuff = inpbuff.split("");
+               }
+                inpbuff.splice(inpbuff.indexOf("π") + 1, 0, "*");
+                inpbuff = inpbuff.join("");
+             }
+             if(typeof(inpbuff) == "object")
+             {
+                inpbuff = inpbuff.join("");
+             }
+             inpbuff = inpbuff.replace("π", "3.14159265358"); //3.14159265358979323
+          }
+          while(inpbuff.indexOf("e") != -1)
+          {
+             e_ind_m1 = inpbuff.indexOf("e") - 1;
+             if(inpbuff[e_ind_m1] != "+" && inpbuff[e_ind_m1] != "-" && inpbuff[e_ind_m1] != "*" && inpbuff[e_ind_m1] != "/" && e_ind_m1 > -1)
+             {
+                inpbuff = inpbuff.split("");
+                inpbuff.splice(inpbuff.indexOf("e"), 0, "*");
+                inpbuff = inpbuff.join("");
+             }
+             e_ind_m1 = inpbuff.indexOf("e") - 1;
+             if(inpbuff[e_ind_m1 + 2] != "+" && inpbuff[e_ind_m1 + 2] != "-" && inpbuff[e_ind_m1 + 2] != "*" && inpbuff[e_ind_m1 + 2] != "/" && e_ind_m1 + 2 < inpbuff.length)
+             {
+               if(typeof(inpbuff) == "string")
+               {
+                  inpbuff = inpbuff.split("");
+               }
+                inpbuff.splice(inpbuff.indexOf("e") + 1, 0, "*");
+                inpbuff = inpbuff.join("");
+             }
+             if(typeof(inpbuff) == "object")
+             {
+                inpbuff = inpbuff.join("");
+             }
+             inpbuff = inpbuff.replace("e", "2.71828182845"); //2.71828182845904523536
+          }
+
+          inpbuff = inpbuff.split("");
+          if((inpbuff[buffl - 2] == "*" || inpbuff[buffl - 2] == "/") && (inpbuff[buffl - 1] == "-"))
+          {
+               inpbuff.pop();
+               inpbuff.pop();
+          }
+          else if(inpbuff[buffl - 1] == "+" || inpbuff[buffl - 1] == "-" || inpbuff[buffl - 1] == "*" || inpbuff[buffl - 1] == "/")
+          {
+               inpbuff.pop();
+          }
+
+          for(i = 0, leng = inpbuff.length; i < leng; i++)
+          {
+              finder = inpbuff[i];
+              if(finder == "*")
+              {
+                  abuff = 1;
+                  break;
+              }
+              else if(finder == "/")
+              {
+                  sbuff = 1;
+                  break;
+              }
+          }
+
+          if(typeof(inpbuff) == "object")
+          {
+             inpbuff = inpbuff.join("");
+          }
+
+          //document.getElementById("skuska").innerHTML = inpbuff;
+          /**/
+
+          if(abuff == 1)
+          {
+               get2(inpbuff, "*");
+          }
+          else if(sbuff == 1)
+          {
+               get2(inpbuff, "/");
+          }
+          else if(abuff == 0 && sbuff == 0)
+          {
+               var bufl = inpbuff.length;
+               for(i = 0, le = inpbuff.length; i < le; i++)
+               {
+                  for(d = 10, e = 0; e < d; e++)
+                  {
+                     finder = inpbuff[i];
+                     if(finder == "-" && inpbuff[i + 1] == "-")
+                     {
+                         inpbuff = inpbuff.replace("--", "+");
+                     }
+                     if(finder == "-" && inpbuff[i + 1] == "+")
+                     {
+                         inpbuff = inpbuff.replace("-+", "-");
+                     }
+                     if(finder == "+" && inpbuff[i + 1] == "-")
+                     {
+                         inpbuff = inpbuff.replace("+-", "-");
+                     }
+                     if(finder == "+" && inpbuff[i + 1] == "+")
+                     {
+                         inpbuff = inpbuff.replace("++", "+");
+                     }
+                     if(inpbuff.length == 2 && inpbuff[0] == "-" && inpbuff[1] == "0")
+                     {
+                         inpbuff = inpbuff.split("");
+                         inpbuff.shift();
+                         inpbuff = inpbuff.join("");
+                     }
+                  }
+               }
+               inpbuff = inpbuff.split("");
+               if(inpbuff[0] == "+")
+               {
+                  delete inpbuff[0];
+               }
+
+               if(inpbuff[0] == "-" && inpbuff.lastIndexOf("-") == 0 && inpbuff.indexOf("+") == -1)
+               {
+                  inpbuff = inpbuff.join("");
+                  ended = 1;
+                  totalsum = inpbuff;
+               }
+               else if(inpbuff.indexOf("+") == -1 && inpbuff.indexOf("-") == -1)
+               {
+                  inpbuff = inpbuff.join("");
+                  ended = 1;
+                  totalsum = inpbuff;
+               }
+               else
+               {
+                   inpbuff = inpbuff.join("");
+                   get2(inpbuff, "+-");
+                   //document.getElementById("skuska").innerHTML = inpbuff;
+               }
+          }
+
+          if(ended == 1)
+          {
+               finalCheck(totalsum);
+          }/**/
+     }
+
+     function get2(txt1, oper)
+     {
+          var buffer2 = "";
+          var numb = [];
+          var firstnum = "";
+          var secondnum = "";
+          var operpos = txt1.indexOf(oper);
+          var artxt1 = txt1.split("");
+          var b = operpos - 1;
+          var mm = 0, mp = 0, pp = 0, pm = 0;
+          var toreplace;
+
+          if(oper == "+-")
+          {
+             if(artxt1[0] == "-")
+             {
+                artxt1.shift();
+                var m_ind = artxt1.indexOf("-");
+                if(artxt1.indexOf("-") == -1)
+                {
+                   m_ind = 2000;
+                }
+                var p_ind = artxt1.indexOf("+");
+                if(artxt1.indexOf("+") == -1)
+                {
+                   p_ind = 2000;
+                }
+
+                if(artxt1.indexOf("+") != -1 && artxt1.indexOf("+") < m_ind)
+                {
+                   artxt1 = artxt1.join("").split("");
+                   b = 0;
+                   firstnum = "";
+                   secondnum = "";
+                   while(buffer2 != "+" && buffer2 != "-")
+                   {
+                      firstnum += artxt1[b];
+                      b++;
+                      buffer2 = artxt1[b];
+                   }
+                   b = artxt1.indexOf("+") + 1;
+                   var bpos = b;
+                   buffer2 = "";
+                   while(buffer2 != "+" && buffer2 != "-" && b < artxt1.length)
+                   {
+                      secondnum += artxt1[b];
+                      b++;
+                      buffer2 = artxt1[b];
+                   }
+                   var seclen = secondnum.length;
+                   var sum1 = Number(firstnum) - Number(secondnum);
+                   sum1 = sum1.toString();
+                   var sec = bpos + seclen;
+                   var repl = artxt1.slice(0, sec);
+                   repl = repl.join("");
+                   toreplace = sum1;
+                   artxt1 = artxt1.join("");
+                   var tocalc = artxt1.replace(repl, toreplace);
+                   tocalc = tocalc.split("");
+                   tocalc.unshift("-");
+                   tocalc = tocalc.join("");
+                   calculate(tocalc);
+                   //document.getElementById("output").innerHTML = tocalc;
+                }
+                else if(artxt1.indexOf("-") != -1 && artxt1.indexOf("-") < p_ind)
+                {
+                  //document.getElementById("skuska").innerHTML = artxt1;
+                   b = 0;
+                   firstnum = "";
+                   secondnum = "";
+                   while(buffer2 != "+" && buffer2 != "-")
+                   {
+                      firstnum += artxt1[b];
+                      b++;
+                      buffer2 = artxt1[b];
+                   }
+                   b = artxt1.indexOf("-") + 1;
+                   var bpos = b;
+                   buffer2 = "";
+                   while(buffer2 != "+" && buffer2 != "-" && b < artxt1.length)
+                   {
+                      secondnum += artxt1[b];
+                      b++;
+                      buffer2 = artxt1[b];
+                   }
+                   var seclen = secondnum.length;
+                   var sum1 = Number(firstnum) + Number(secondnum);
+                   sum1 = sum1.toString();
+                   var sec = bpos + seclen;
+                   var repl = artxt1.slice(0, sec);
+                   repl = repl.join("");
+                   toreplace = sum1;
+                   artxt1 = artxt1.join("");
+                   var tocalc = artxt1.replace(repl, toreplace);
+                   tocalc = tocalc.split("");
+                   tocalc.unshift("-");
+                   tocalc = tocalc.join("");
+                   calculate(tocalc);
+                }
+             }
+             else if(artxt1[0] != "-")
+             {
+                var m_ind = artxt1.indexOf("-");
+                if(artxt1.indexOf("-") == -1)
+                {
+                   m_ind = 4000;
+                }
+                var p_ind = artxt1.indexOf("+");
+                if(artxt1.indexOf("+") == -1)
+                {
+                   p_ind = 4000;
+                }
+                //document.getElementById("skuska").innerHTML = artxt1;
+                if(artxt1.indexOf("+") != -1 && artxt1.indexOf("+") < m_ind)
+                {
+                   b = 0;
+                   firstnum = "";
+                   secondnum = "";
+                   while(buffer2 != "+" && buffer2 != "-")
+                   {
+                      firstnum += artxt1[b];
+                      b++;
+                      buffer2 = artxt1[b];
+                   }
+                   b = artxt1.indexOf("+") + 1;
+                   var bpos = b;
+                   buffer2 = "";
+                   while(buffer2 != "+" && buffer2 != "-" && b < artxt1.length)
+                   {
+                      secondnum += artxt1[b];
+                      b++;
+                      buffer2 = artxt1[b];
+                   }
+                   var seclen = secondnum.length;
+                   var sum1 = Number(firstnum) + Number(secondnum);
+                   sum1 = sum1.toString();
+                   var sec = bpos + seclen;
+                   var repl = artxt1.slice(0, sec);
+                   repl = repl.join("");
+                   toreplace = sum1;
+                   artxt1 = artxt1.join("");
+                   var tocalc = artxt1.replace(repl, toreplace);
+                   calculate(tocalc);
+                }
+                else if(artxt1.indexOf("-") != -1 && artxt1.indexOf("-") < p_ind)
+                {
+                   b = 0;
+                   firstnum = "";
+                   secondnum = "";
+                   while(buffer2 != "+" && buffer2 != "-")
+                   {
+                      firstnum += artxt1[b];
+                      b++;
+                      buffer2 = artxt1[b];
+                   }
+                   b = artxt1.indexOf("-") + 1;
+                   var bpos = b;
+                   buffer2 = "";
+                   while(buffer2 != "+" && buffer2 != "-" && b < artxt1.length)
+                   {
+                      secondnum += artxt1[b];
+                      b++;
+                      buffer2 = artxt1[b];
+                   }
+                   var seclen = secondnum.length;
+                   var sum1 = Number(firstnum) - Number(secondnum);
+                   sum1 = sum1.toString();
+                   var sec = bpos + seclen;
+                   var repl = artxt1.slice(0, sec);
+                   repl = repl.join("");
+                   toreplace = sum1;
+                   artxt1 = artxt1.join("");
+                   var tocalc = artxt1.replace(repl, toreplace);
+                   /*
+                   if(n == 5)
+                   {
+                      document.getElementById("skuska").innerHTML = toreplace;
+                   }
+                   */
+                   calculate(tocalc);
+                   //document.getElementById("skuska").innerHTML = artxt1;
+                }
+             }
+             //document.getElementById("skuska").innerHTML = artxt1;
+          }
+          else if(oper == "*" || oper == "/")
+          {
+              while(buffer2 != "+" && buffer2 != "-" && buffer2 != "/" && b > -1 && buffer2 != "*")
+              {
+                   numb.splice(0, 0, artxt1[b]);
+                   b--;
+                   buffer2 = artxt1[b];
+              }
+              for(i = 0, le = numb.length; i < le; i++)
+              {
+                    firstnum += numb[i];
+              }
+              var numb1 = [];
+              b = operpos + 1;
+              buffer2 = "";
+
+              while(buffer2 != "+" && buffer2 != "-" && buffer2 != "/" && buffer2 != "*" && b < txt1.length)
+              {
+                   numb1.splice(numb1.length, 0, artxt1[b]);
+                   b++;
+                   buffer2 = artxt1[b];
+              }
+              for(i = 0, len = numb1.length; i < len; i++)
+              {
+                    secondnum +=numb1[i];
+              }
+              var fi = operpos - numb.length;
+              var se = operpos + numb1.length + 1;
+              var newtxt = artxt1.slice(fi, se);
+              var newtxt1 = "";
+              for(i = 0, c = newtxt.length; i < c; i++)
+              {
+                   newtxt1 += newtxt[i];
+              }
+              if(oper == "*")
+              {
+                   toreplace = ((Number(firstnum) * 10) * (Number(secondnum) * 10))/100;
+              }
+              else if(oper == "/")
+              {
+                   toreplace = (Number(firstnum) * 10) / (Number(secondnum) * 10);
+              }
+              else if(oper == "+")
+              {
+                   toreplace = ((Number(firstnum) * 10) + (Number(secondnum) * 10))/10;
+              }
+              else if(oper == "-")
+              {
+                   toreplace = ((Number(firstnum) * 10) - (Number(secondnum) * 10))/10;
+              }
+
+              toreplace = toreplace.toString();
+              var newtxt2 = txt1.replace(newtxt1, toreplace);
+              calculate(newtxt2);
+         }
+      }
+
+      function clearAll()
+      {
+           document.getElementById("main_input").innerHTML = "";
+           document.getElementById("output").innerHTML = "";
+      }
+
+
+     function checkstr(sym)
+     {
+          var x = document.getElementById("main_input").innerHTML;
+          x = x.split("");
+          var xle = x.length;
+
+          if(x[x.length - 1] == "*")
+          {
+               if(sym == "-")
+               {
+                    x[x.length] = sym;
+               }
+               else if(sym != ".")
+               {
+                    x[x.length - 1] = sym;
+               }
+               x = x.join("");
+               document.getElementById("main_input").innerHTML = x;
+          }
+          else if(x[x.length - 1] == "/")
+          {
+               if(sym == "-")
+               {
+                    x[x.length] = sym;
+               }
+               else if(sym != ".")
+               {
+                    x[x.length - 1] = sym;
+               }
+               x = x.join("");
+              document.getElementById("main_input").innerHTML = x;
+          }
+          else if(x[x.length - 1] == "+")
+          {
+               if(sym != ".")
+               {
+                    x[x.length - 1] = sym;
+                    x = x.join("");
+                    document.getElementById("main_input").innerHTML = x;
+               }
+          }
+          else if(x[x.length - 1] == "-")
+          {
+              if(x[x.length - 2] != "*" && x[x.length - 2] != "/" && xle != 1)
+              {
+                  if(sym != ".")
+                  {
+                     x[x.length - 1] = sym;
+                     x = x.join("");
+                     document.getElementById("main_input").innerHTML = x;
+                  }
+              }
+          }
+          else if(x[x.length - 1] == "π" || x[x.length - 1] == "e")
+          {
+               if(sym != ".")
+               {
+                   x[x.length] = sym;
+               }
+               x = x.join("");
+               for(s = 0, d = x.length; s <= d; s++)
+               document.getElementById("main_input").innerHTML = x;
+          }
+          else if(x[x.length - 1] == ".")
+          {
+               if(sym == ".")
+               {
+                    x[x.length - 1] = sym;
+               }
+               else
+               {
+                    x[x.length] = sym;
+               }
+               x = x.join("");
+               for(s = 0, d = x.length; s <= d; s++)
+               document.getElementById("main_input").innerHTML = x;
+          }
+          else if(x[x.length - 1] != "+" && x[x.length - 1] != "-" && x[x.length - 1] != "*" && x[x.length - 1] != "/")
+          {
+               x = x.join("");
+               if(xle == 0 && sym == "-")
+               {
+                    x += "-";
+               }
+               else if(xle == 0 && sym != "-")
+               {}
+               else
+               {
+                    x += sym;
+               }
+               document.getElementById("main_input").innerHTML = x;
+          }
+          if(sym == "." && dotin == 0 && x[x.length - 1] != "π" && x[x.length - 1] != "e")
+          {
+               x += sym;
+          }
+     }
+
+     function finalCheck(str)
+     {
+        if(str == "Infinity")
+        {
+           document.getElementById("output").innerHTML = "Error:&#160division&#160by&#160zero";
+        }
+        else if(str == "NaN")
+        {
+           document.getElementById("output").innerHTML = "Error:&#160invalid&#160input&#160(or&#160malfunction&#160in&#160the&#160program,&#160but&#160check&#160it&#160anyway)";
+        }
+        else
+        {
+           document.getElementById("output").innerHTML = str;
+        }
+     }
+
+</script>
+
+</html>
