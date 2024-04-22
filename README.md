@@ -9,5 +9,6 @@ This is an old project I did in high school. I just decided to learn programming
 
 - [Tomáš Žilínek](https://www.linkedin.com/in/tomaszilinek)
 
-![image description](res/normal.png)
-![image description](res/dropdown.png)
+![image description](res/calculator1.png)
+![image description](res/calculator2.png)
+![image description](res/calculator3.png)
